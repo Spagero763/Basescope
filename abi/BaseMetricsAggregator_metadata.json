@@ -1,0 +1,478 @@
+{
+	"compiler": {
+		"version": "0.8.19+commit.7dd6d404"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "protocol",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "tvl",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "volume",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "users",
+						"type": "uint256"
+					}
+				],
+				"name": "MetricsUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "volume",
+						"type": "uint256"
+					}
+				],
+				"name": "TokenPriceUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "updater",
+						"type": "address"
+					}
+				],
+				"name": "UpdaterAuthorized",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_updater",
+						"type": "address"
+					}
+				],
+				"name": "authorizeUpdater",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "authorizedUpdaters",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string[]",
+						"name": "_protocols",
+						"type": "string[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "_tvls",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "_volumes",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "_users",
+						"type": "uint256[]"
+					}
+				],
+				"name": "batchUpdateProtocols",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllProtocols",
+				"outputs": [
+					{
+						"internalType": "string[]",
+						"name": "",
+						"type": "string[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllTokens",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_protocol",
+						"type": "string"
+					}
+				],
+				"name": "getProtocolWithAPY",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tvl",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "volume24h",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "users",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "timestamp",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "isActive",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct BaseMetricsAggregator.ProtocolMetrics",
+						"name": "metrics",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "estimatedAPY",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"name": "protocolData",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "tvl",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "volume24h",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "users",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isActive",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "protocolNames",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_updater",
+						"type": "address"
+					}
+				],
+				"name": "removeUpdater",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "tokenPrices",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "volume",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "marketCap",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastUpdate",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "trackedTokens",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_protocol",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_tvl",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_volume24h",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_users",
+						"type": "uint256"
+					}
+				],
+				"name": "updateProtocolMetrics",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_token",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_volume",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_marketCap",
+						"type": "uint256"
+					}
+				],
+				"name": "updateTokenPrice",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "Your Name",
+			"details": "Aggregates and stores DeFi metrics for Base ecosystem",
+			"kind": "dev",
+			"methods": {
+				"authorizeUpdater(address)": {
+					"details": "Authorize new updater"
+				},
+				"batchUpdateProtocols(string[],uint256[],uint256[],uint256[])": {
+					"details": "Batch update multiple protocols"
+				},
+				"getAllProtocols()": {
+					"details": "Get all protocol metrics"
+				},
+				"getAllTokens()": {
+					"details": "Get all tracked tokens"
+				},
+				"getProtocolWithAPY(string)": {
+					"details": "Get protocol metrics with calculated APY"
+				},
+				"removeUpdater(address)": {
+					"details": "Remove updater authorization"
+				},
+				"updateProtocolMetrics(string,uint256,uint256,uint256)": {
+					"details": "Update protocol metrics"
+				},
+				"updateTokenPrice(address,uint256,uint256,uint256)": {
+					"details": "Update token price data"
+				}
+			},
+			"title": "BaseMetricsAggregator",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"BaseMetricsAggregator.sol": "BaseMetricsAggregator"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"BaseMetricsAggregator.sol": {
+			"keccak256": "0xd4b1acb8b08f13bfbdb66552c597cb7d85dad065969d38c2f2d91f16d17c7392",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8505f1417c1e144fc65aa184503686ad252081e692725085de368b4bb13666ec",
+				"dweb:/ipfs/QmYMH4wG2oxQjSGf3pT9fC4e3XczwfP5JppTtHiKFzy3Bq"
+			]
+		}
+	},
+	"version": 1
+}
