@@ -1,0 +1,193 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+/**
+ * @title BaseMetricsAggregator
+ * @dev Aggregates and stores DeFi metrics for Base ecosystem
+ * @author Your Name
+ */
+contract BaseMetricsAggregator {
+    struct ProtocolMetrics {
+        uint256 tvl;
+        uint256 volume24h;
+        uint256 users;
+        uint256 timestamp;
+        bool isActive;
+    }
+    
+    struct TokenPrice {
+        uint256 price;
+        uint256 volume;
+        uint256 marketCap;
+        uint256 lastUpdate;
+    }
+    
+    mapping(string => ProtocolMetrics) public protocolData;
+    mapping(address => TokenPrice) public tokenPrices;
+    mapping(address => bool) public authorizedUpdaters;
+    
+    address public owner;
+    string[] public protocolNames;
+    address[] public trackedTokens;
+    
+    event MetricsUpdated(string protocol, uint256 tvl, uint256 volume, uint256 users);
+    event TokenPriceUpdated(address token, uint256 price, uint256 volume);
+    event UpdaterAuthorized(address updater);
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+    
+    modifier onlyAuthorized() {
+        require(authorizedUpdaters[msg.sender] || msg.sender == owner, "Not authorized");
+        _;
+    }
+    
+    constructor() {
+        owner = msg.sender;
+        authorizedUpdaters[msg.sender] = true;
+    }
+    
+    /**
+     * @dev Update protocol metrics
+     */
+    function updateProtocolMetrics(
+        string memory _protocol,
+        uint256 _tvl,
+        uint256 _volume24h,
+        uint256 _users
+    ) external onlyAuthorized {
+        protocolData[_protocol] = ProtocolMetrics({
+            tvl: _tvl,
+            volume24h: _volume24h,
+            users: _users,
+            timestamp: block.timestamp,
+            isActive: true
+        });
+        
+        // Add to protocol list if new
+        if (!_protocolExists(_protocol)) {
+            protocolNames.push(_protocol);
+        }
+        
+        emit MetricsUpdated(_protocol, _tvl, _volume24h, _users);
+    }
+    
+    /**
+     * @dev Update token price data
+     */
+    function updateTokenPrice(
+        address _token,
+        uint256 _price,
+        uint256 _volume,
+        uint256 _marketCap
+    ) external onlyAuthorized {
+        tokenPrices[_token] = TokenPrice({
+            price: _price,
+            volume: _volume,
+            marketCap: _marketCap,
+            lastUpdate: block.timestamp
+        });
+        
+        // Add to tracked tokens if new
+        if (!_tokenExists(_token)) {
+            trackedTokens.push(_token);
+        }
+        
+        emit TokenPriceUpdated(_token, _price, _volume);
+    }
+    
+    /**
+     * @dev Get all protocol metrics
+     */
+    function getAllProtocols() external view returns (string[] memory) {
+        return protocolNames;
+    }
+    
+    /**
+     * @dev Get all tracked tokens
+     */
+    function getAllTokens() external view returns (address[] memory) {
+        return trackedTokens;
+    }
+    
+    /**
+     * @dev Get protocol metrics with calculated APY
+     */
+    function getProtocolWithAPY(string memory _protocol) 
+        external 
+        view 
+        returns (ProtocolMetrics memory metrics, uint256 estimatedAPY) 
+    {
+        metrics = protocolData[_protocol];
+        // Simple APY calculation based on volume/TVL ratio
+        if (metrics.tvl > 0) {
+            estimatedAPY = (metrics.volume24h * 365 * 100) / metrics.tvl;
+        }
+    }
+    
+    /**
+     * @dev Authorize new updater
+     */
+    function authorizeUpdater(address _updater) external onlyOwner {
+        authorizedUpdaters[_updater] = true;
+        emit UpdaterAuthorized(_updater);
+    }
+    
+    /**
+     * @dev Remove updater authorization
+     */
+    function removeUpdater(address _updater) external onlyOwner {
+        authorizedUpdaters[_updater] = false;
+    }
+    
+    /**
+     * @dev Batch update multiple protocols
+     */
+    function batchUpdateProtocols(
+        string[] memory _protocols,
+        uint256[] memory _tvls,
+        uint256[] memory _volumes,
+        uint256[] memory _users
+    ) external onlyAuthorized {
+        require(_protocols.length == _tvls.length, "Array length mismatch");
+        require(_tvls.length == _volumes.length, "Array length mismatch");
+        require(_volumes.length == _users.length, "Array length mismatch");
+        
+        for (uint i = 0; i < _protocols.length; i++) {
+            protocolData[_protocols[i]] = ProtocolMetrics({
+                tvl: _tvls[i],
+                volume24h: _volumes[i],
+                users: _users[i],
+                timestamp: block.timestamp,
+                isActive: true
+            });
+            
+            if (!_protocolExists(_protocols[i])) {
+                protocolNames.push(_protocols[i]);
+            }
+            
+            emit MetricsUpdated(_protocols[i], _tvls[i], _volumes[i], _users[i]);
+        }
+    }
+    
+    // Internal helper functions
+    function _protocolExists(string memory _protocol) internal view returns (bool) {
+        for (uint i = 0; i < protocolNames.length; i++) {
+            if (keccak256(bytes(protocolNames[i])) == keccak256(bytes(_protocol))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    function _tokenExists(address _token) internal view returns (bool) {
+        for (uint i = 0; i < trackedTokens.length; i++) {
+            if (trackedTokens[i] == _token) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
